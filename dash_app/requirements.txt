@@ -1,0 +1,5 @@
+dash
+numpy
+scikit-learn
+plotly
+gunicorn
