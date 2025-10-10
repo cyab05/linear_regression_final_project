@@ -1,0 +1,903 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>A Guide to Robust Regression &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'robust_regression';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to your Jupyter Book" href="intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="My sample book - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="My sample book - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to your Jupyter Book
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">A Guide to Robust Regression</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Frobust_regression.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/robust_regression.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>A Guide to Robust Regression</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-basics-linear-regression">The Basics - Linear Regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#digging-deeper">Digging Deeper</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-huber-regression">What is Huber Regression?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-of-ols-vs-huber-regression">Comparison of OLS Vs Huber Regression</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#let-s-understand-the-difference-between-least-squares-method-and-absolute-deviation-method">Let’s understand the difference between Least Squares Method and Absolute Deviation Method</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#huber-regressor-algorithm">Huber Regressor Algorithm</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#about-the-huber-loss-function">About the Huber Loss Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loss-function-behaviour">Loss Function Behaviour</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-with-ols-and-mae">Comparison with OLS and MAE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#goal">Goal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-choose-the-parameter">How to choose the parameter δ ?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#advantages-of-huber-regression">Advantages of Huber Regression</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenges-of-huber-regression">Challenges of Huber Regression</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aside-the-reason-to-limit-outliers-effect">Aside: The Reason to Limit Outliers’ Effect</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulations">Simulations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="a-guide-to-robust-regression">
+<h1>A Guide to Robust Regression<a class="headerlink" href="#a-guide-to-robust-regression" title="Link to this heading">#</a></h1>
+<p>**Blog by Connor Yablonski, Zarko Cosovik, Anika Shridhar (University of San Francisco)</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>One of the fundational goals of statistics is the ability to predict the future. While this goal is an impossible frontier to reach, even a small change in predictive accuracy can be the difference between fortune and failure. Elections are won and lost, hedge fund managers fired or promoted, and gamblers make it big or ruin their lives over a difference of a few percentage points in predictive accuracy. To put this into concrete terms, a sports gambler betting on simple wins and losses needs to win 52.38% of their bets to break even. [1] Winning 54% could net them a great fortune in the long run, and yet hitting on 50% of bets would result in devastating losses. The question is: how do we reliably predict the future? As you may realize by the success of Las Vegas casinos and sportbooks, we humans are not naturals at factoring in every variable, weighing them, and coming to a valid conclusion on our own. That is the beauty of <strong>linear regression</strong>.</p>
+<p>In short, linear regression is a model that estimates the relationship between a response variable, or the value we are trying to predict (think price of a stock or chance of a team winning), and one or more explanatory variables. Creating a linear regression model involves the collection of a large set of data, and the “fitting” of the explanatory columns of that dataset to the response column.</p>
+<p>Linear regression is a powerful tool, but it has its disadvantages. Particularly, there are assumptions about the characteristics of the dataset that must be met in order for traditional linear regression to be valid. However, the collection of a large dataset can be an expensive and time-consuming endevour. That is where the topic of the article, <strong>robust regression</strong>, comes into play. Robust regression is a form of linear regression that seeks to limit the effect that violations of assumptions have on the model.</p>
+<p>Before we dive into the details of robust regression, lets first introduce the basics of traditional linear regression.</p>
+</section>
+<section id="the-basics-linear-regression">
+<h2>The Basics - Linear Regression<a class="headerlink" href="#the-basics-linear-regression" title="Link to this heading">#</a></h2>
+<p>In simple terms, Linear Regression is a method to identify the best straight line that goes through a set of data points, in order to understand the relationships in the data and make predictions accordingly. To demonstrate with a simple example, let’s say you have the data of the temperature outside and the sales of the ice-cream corresponding to the temperature that looks like this:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Temperature (degF)</p></th>
+<th class="head"><p>Ice-cream Sales ($)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>60</p></td>
+<td><p>120</p></td>
+</tr>
+<tr class="row-odd"><td><p>70</p></td>
+<td><p>150</p></td>
+</tr>
+<tr class="row-even"><td><p>80</p></td>
+<td><p>200</p></td>
+</tr>
+<tr class="row-odd"><td><p>90</p></td>
+<td><p>260</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>With linear regression, you can represent this data in the form of a straight line that best represents this pattern, which in this case would be:</p>
+<p>Sales = 2.5 x Temperature - 30</p>
+<p>So, if you would want to predict what would be the sales tomorrow if the temperature is 100 degrees, the sales would be (2.5 x 100 - 30) ie 220$</p>
+<p>We can interpret this as with a unit increase in temperature, the sales increases by 2.5 dollars.
+And when the temperature is 0 degrees, the sales would be -30 (which would not make sense in real life, but this is how we interpret statistically)</p>
+<p>Here’s a simple script to plot the above data:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearRegression</span>
+
+<span class="c1"># Sample Data: Temperature vs Ice-Cream Sales</span>
+<span class="n">temperature</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">60</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">sales</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">120</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">260</span><span class="p">])</span>
+
+<span class="c1"># Create and Fit the Model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">temperature</span><span class="p">,</span> <span class="n">sales</span><span class="p">)</span>
+
+<span class="c1"># Generate Predicted Values</span>
+<span class="n">temp_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">55</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>   <span class="c1"># smooth range for plotting</span>
+<span class="n">pred_sales</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">temp_range</span><span class="p">)</span>
+
+<span class="c1"># Plot the Data and Regression Line</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">temperature</span><span class="p">,</span> <span class="n">sales</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Actual Data (Sales)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">temp_range</span><span class="p">,</span> <span class="n">pred_sales</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Regression Line&#39;</span><span class="p">)</span>
+
+<span class="c1"># Add Titles and Labels</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Linear Regression: Temperature vs Ice-Cream Sales&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Temperature (°F)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Ice-Cream Sales ($)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/0fee525b901c67dd317222a72b4b6350bb6962476fea201f59273528aeb0ca7a.png" src="_images/0fee525b901c67dd317222a72b4b6350bb6962476fea201f59273528aeb0ca7a.png" />
+</div>
+</div>
+<p>To understand the technicality of linear regression, we would need to know the below terms:</p>
+<ul class="simple">
+<li><p>Residual:  This is the difference between what the regression line has predicted and what is the actual value.</p></li>
+</ul>
+<p>In the ice-cream example, say if the actual sales tomorrow was 300<span class="math notranslate nohighlight">\( when the temperature was 100 degrees, then the residual calculated would be 300-220 ie 80\)</span>. The residuals can either be positive or negative, if positive, the actual value would be above the regression line, if negative the actual value would be below the regression line.</p>
+<ul class="simple">
+<li><p>Outlier:  An observation with a large residual, which means that the data point is very different as compared to the rest of the data and would not fit in the regression line.</p></li>
+</ul>
+<p>In the ice-cream example, say if we had another observation as shown below:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Temperature (degF)</p></th>
+<th class="head"><p>Ice-cream Sales ($)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>60</p></td>
+<td><p>120</p></td>
+</tr>
+<tr class="row-odd"><td><p>70</p></td>
+<td><p>150</p></td>
+</tr>
+<tr class="row-even"><td><p>80</p></td>
+<td><p>200</p></td>
+</tr>
+<tr class="row-odd"><td><p>90</p></td>
+<td><p>260</p></td>
+</tr>
+<tr class="row-even"><td><p>85</p></td>
+<td><p>600</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The sales of 600$ for a temperature at 85 degrees, doesn’t follow the pattern like the other data points and hence this observation is considered an “outlier”.</p>
+<ul class="simple">
+<li><p>Ordinary Least Squares (OLS): This is a method for finding that line that best represents the data. It is calculated by summing up the residuals squared, and the line is chosen that minimizes this sum. This is a very standard method of linear regression, but it has its pitfalls.</p></li>
+</ul>
+</section>
+<section id="digging-deeper">
+<h2>Digging Deeper<a class="headerlink" href="#digging-deeper" title="Link to this heading">#</a></h2>
+<p>In more technical terms, linear regression is a statistical method of modeling the relationship between the predictor and the response. It fits a straight line to the data, and the coefficients are based on the OLS calculation.</p>
+<p>Traditional linear regression is sensitive to outliers because the errors are squared, so the big errors affect the model more than the small errors. This is why OLS is sensitive to outliers as only a few can distort the model and make it unsuitable for making predictions.</p>
+<p>When we look at the distribution of house prices, we find that it is skewed. Although most houses are in a close price range, there are outliers, very expensive houses which can negatively affect the result of OLS, by causing the model to have suboptimum estimates. Since data with outliers makes OLS results less precise, we turn to ROBUST REGRESSION to address this issue. Robust regression is a category of regression methods that are less influenced by outliers.</p>
+<p>One of the most common robust regression methods is HUBER REGRESSION. This method behaves like OLS when the errors are small, but is less affected by large errors. The rest of this blog will explain robust regression through the example of Huber regression.</p>
+<section id="what-is-huber-regression">
+<h3>What is Huber Regression?<a class="headerlink" href="#what-is-huber-regression" title="Link to this heading">#</a></h3>
+<p>Hubber Regression is fitting majority of data accurately, while acknowledging that outliers exits, and using a loss function that grows more slowly in presence of large residuals. This means that extreme values have less influence on the fitted model, reducing the impact of outliers.</p>
+<p>Below we compare OLS to Huber Regression to show how Huber Regression finds a more realistic fit when outliers are present.</p>
+<p>The 3D plot shows that the Huber Regression plane provides a more accurate description of the distribution than does the OLS. Using an interactive app’s slider to add more outliers, we see how the estimates change when with added outliers.</p>
+<p>What we find is that OLS and Huber Regression make the same fit when there are no outliers, but as we add more outliers, we can see the two lines diverge.</p>
+<p>In fact, by the first outlier added it is already clear which one is the favorite, as the OLS line is pulled up at the left end, while Huber Regression line is unaffected.</p>
+<p>The more outliers we add the better the Huber Regression is performing compared to OLS.</p>
+</section>
+<section id="comparison-of-ols-vs-huber-regression">
+<h3>Comparison of OLS Vs Huber Regression<a class="headerlink" href="#comparison-of-ols-vs-huber-regression" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearRegression</span>
+
+<span class="c1"># Step 1: Create clean linear data</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">X</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># Reshape for sklearn</span>
+<span class="n">X_reshaped</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Step 2: Fit OLS to clean data</span>
+<span class="n">model_clean</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_reshaped</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">y_pred_clean</span> <span class="o">=</span> <span class="n">model_clean</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_reshaped</span><span class="p">)</span>
+
+<span class="c1"># Step 3: Add outliers</span>
+<span class="n">X_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span>
+<span class="n">y_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">X_out_reshaped</span> <span class="o">=</span> <span class="n">X_out</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Step 4: Fit OLS to data with outliers</span>
+<span class="n">model_outliers</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_out_reshaped</span><span class="p">,</span> <span class="n">y_out</span><span class="p">)</span>
+<span class="n">y_pred_outliers</span> <span class="o">=</span> <span class="n">model_outliers</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_reshaped</span><span class="p">)</span>
+
+<span class="c1"># Step 5: Plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="c1"># Left: Clean data</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Data (Clean)&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y_pred_clean</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;OLS Fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;OLS on Clean Data&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Right: With outliers</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_out</span><span class="p">,</span> <span class="n">y_out</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Data (With Outliers)&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y_pred_outliers</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;OLS Fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;OLS with Outliers&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/04b06fb6a8ba71eb2eb8d422453a4a9da3e1a7a0abebb0e403b775a885fd4aa4.png" src="_images/04b06fb6a8ba71eb2eb8d422453a4a9da3e1a7a0abebb0e403b775a885fd4aa4.png" />
+</div>
+</div>
+<p>The plots above show that the line fits the data better when there are no outliers.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearRegression</span><span class="p">,</span> <span class="n">HuberRegressor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_squared_error</span>
+
+<span class="c1"># Generate synthetic data</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">X</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># Add outliers</span>
+<span class="n">X_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
+<span class="n">y_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">])</span>
+
+<span class="n">X_out</span> <span class="o">=</span> <span class="n">X_out</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Fit models</span>
+<span class="n">ols</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_out</span><span class="p">,</span> <span class="n">y_out</span><span class="p">)</span>
+<span class="n">huber</span> <span class="o">=</span> <span class="n">HuberRegressor</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_out</span><span class="p">,</span> <span class="n">y_out</span><span class="p">)</span>
+
+<span class="c1"># Predictions</span>
+<span class="n">x_plot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">y_ols</span> <span class="o">=</span> <span class="n">ols</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_plot</span><span class="p">)</span>
+<span class="n">y_huber</span> <span class="o">=</span> <span class="n">huber</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_plot</span><span class="p">)</span>
+
+<span class="c1"># Plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_out</span><span class="p">,</span> <span class="n">y_out</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Data with outliers&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_plot</span><span class="p">,</span> <span class="n">y_ols</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;OLS Regression&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_plot</span><span class="p">,</span> <span class="n">y_huber</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Huber Regression&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;OLS vs Huber Regression&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/6f57581298c3ecc5a65ac771892635b1a342663f427be194b68acae7ba67a793.png" src="_images/6f57581298c3ecc5a65ac771892635b1a342663f427be194b68acae7ba67a793.png" />
+</div>
+</div>
+<p>The plot above shows the comparisson of OLS Regression and the Huber loss model which is designed to combat outliers and seems to fit the data better than OLS Regression.</p>
+</section>
+<section id="let-s-understand-the-difference-between-least-squares-method-and-absolute-deviation-method">
+<h3>Let’s understand the difference between Least Squares Method and Absolute Deviation Method<a class="headerlink" href="#let-s-understand-the-difference-between-least-squares-method-and-absolute-deviation-method" title="Link to this heading">#</a></h3>
+<p>In the Least Squares Method, we are trying to MINIMIZE the AVERAGE SQUARED DIFFERENCES between the actual and the predicted values.</p>
+<p>The Mean Squared Error loss function is defined as:</p>
+<div class="math notranslate nohighlight">
+\[
+MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+\]</div>
+<p>In the Least Absolute Deviation Method, we are trying to MINIMIZE the AVERGAE ABSOLUTE DIFFERENCES between the actual and predicted values.</p>
+<p>The Mean Absolute Error loss function is defined as:</p>
+<div class="math notranslate nohighlight">
+\[
+MAE = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|
+\]</div>
+</section>
+</section>
+<section id="huber-regressor-algorithm">
+<h2>Huber Regressor Algorithm<a class="headerlink" href="#huber-regressor-algorithm" title="Link to this heading">#</a></h2>
+<p>This algorithm combines the advantages of Least Squares Method AND the Absolute Deviation Method in order to MINIMIZE the impact of outliers in the data !</p>
+<section id="about-the-huber-loss-function">
+<h3>About the Huber Loss Function<a class="headerlink" href="#about-the-huber-loss-function" title="Link to this heading">#</a></h3>
+<p>The Huber Loss Function (represented by L(y,yhat) as shown below) smoothly transitions from (Mean Squared Error) MSE to (Mean Absolute Error) MAE based on a threshold parameter called epsilon δ, which controls the point where the loss function transitions from quadratic to linear.</p>
+<p>It can be defined as :</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+L_\delta(y, \hat{y}) =
+\begin{cases}
+\frac{1}{2}(y - \hat{y})^2, &amp; \text{for } |y - \hat{y}| \le \delta \\
+\delta \, (|y - \hat{y}| - \frac{1}{2}\delta), &amp; \text{for } |y - \hat{y}| &gt; \delta
+\end{cases}
+\end{split}\]</div>
+<p>We can write the residual as
+$<span class="math notranslate nohighlight">\(
+r_i = y_i - \hat{y}_i
+\)</span>$</p>
+<p>The above Loss function formula can be read in simple terms as below:</p>
+<p>For residuals less than or equal to epsilon: L(residual) = 0.5 * residual^2</p>
+<p>For residuals greater than epsilon: L(residual) = epsilon * (abs(residual) - 0.5 * epsilon)</p>
+<p>At the point</p>
+<div class="math notranslate nohighlight">
+\[
+|r_i| = \delta
+\]</div>
+<p>the function switches from a quadratic shape to a linear shape.</p>
+</section>
+<section id="loss-function-behaviour">
+<h3>Loss Function Behaviour<a class="headerlink" href="#loss-function-behaviour" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Quadratic (MSE-like) for small residuals: When ∣residual∣≤δ, the loss is <em>quadratic</em>. This makes the model sensitive to small errors, similar to the mean squared error (MSE), ensuring that it fits the data points closely when errors are small.</p></li>
+<li><p>Linear (MAE-like) for large residuals: When ∣residual∣&gt;δ , the loss becomes <em>linear</em>. This limits the influence of outliers by reducing the penalty for large residuals, similar to the mean absolute error (MAE), making the model more robust to extreme values.</p></li>
+</ol>
+<p>This behavior allows the Huber Regressor to be robust to outliers while still being sensitive to small deviations in the data.</p>
+</section>
+<section id="comparison-with-ols-and-mae">
+<h3>Comparison with OLS and MAE<a class="headerlink" href="#comparison-with-ols-and-mae" title="Link to this heading">#</a></h3>
+<p>OLS (Ordinary Least Squares): Uses a fully quadratic loss, making it very sensitive to outliers, as large errors are penalized more heavily.</p>
+<p>MAE (Mean Absolute Error): Uses a fully linear loss, making it robust to outliers, but it may underperform in capturing small deviations in the data.</p>
+<p>Huber Regressor: Combines the two, being <em>quadratic</em> for SMALL residuals (like OLS) and <em>linear</em> for LARGE residuals (like MAE)</p>
+</section>
+<section id="goal">
+<h3>Goal<a class="headerlink" href="#goal" title="Link to this heading">#</a></h3>
+<p>The Huber Regressor minimizes the sum of the Huber losses for all data points:</p>
+<div class="math notranslate nohighlight">
+\[
+\min_{\hat{y}} \sum_{i=1}^{n} L_\delta(r_i)
+\]</div>
+<p>This is done using iterative methods because the Huber loss function is non-smooth at point where the magnitude of the residual becomes equal to the threshold parameter</p>
+<p>When we iteratively update the coefficients using the Huber loss function, the HuberRegressor algorithm finds a set of coefficients that MINIMIZES the OVERALL LOSS while being less influenced by outliers compared to OLS regression.</p>
+<p>This is how HuberRegressor algorithm strikes a balance between the robustness of the absolute deviation loss and the efficiency of the squared loss!</p>
+</section>
+<section id="how-to-choose-the-parameter">
+<h3>How to choose the parameter δ ?<a class="headerlink" href="#how-to-choose-the-parameter" title="Link to this heading">#</a></h3>
+<p>Small δ: The model will be more robust to outliers, but less sensitive to normal data points.</p>
+<p>Large δ: The model behaves more like OLS, being more sensitive to small errors but also more influenced by outliers.</p>
+<p>The ideal value of δ is usually determined using cross-validation.</p>
+</section>
+<section id="advantages-of-huber-regression">
+<h3>Advantages of Huber Regression<a class="headerlink" href="#advantages-of-huber-regression" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Robustness to Outliers: The robustness is acheived by using a hybrid loss function that smoothly transitions between the squared loss (MSE) and the absolute loss (MAE). This makes the algorithm downweight the influence of outliers on the parameter estimates.</p></li>
+<li><p>Balance between Least Squares and Absolute Deviation: It leverages the efficiency of OLS regression when the residuals are normally distributed, whilst providing robustness to outliers by incorporating the absolute deviation loss. This combination allows the algorithm to provide reliable parameter estimates in the presence of both small and large deviations from the model assumptions.</p></li>
+<li><p>Continuity and Differentiability: The Huber loss function is continuous and differentiable, ensuring that optimization algorithms can be applied effectively to minimize the loss function.</p></li>
+<li><p>Tunable Robustness: The HuberRegressor allows you to control the robustness to outliers through the epsilon parameter. By adjusting the epsilon value, you can customize the level of robustness to match the characteristics of your dataset. Smaller epsilon values emphasize the squared loss (MSE), making the model more similar to OLS regression, while larger epsilon values emphasize the absolute loss (MAE), enhancing robustness to outliers.</p></li>
+<li><p>Computational Efficiency: Although the HuberRegressor may be slightly computationally more expensive than OLS regression due to the hybrid loss function, it is generally more efficient compared to some other robust regression techniques like RANSAC (Random Sample Consensus) or Theil-Sen estimator. This is useful when working with large datasets.</p></li>
+</ol>
+</section>
+<section id="challenges-of-huber-regression">
+<h3>Challenges of Huber Regression<a class="headerlink" href="#challenges-of-huber-regression" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Model Complexity: Robust regression techniques require complex computations compared to traditional methods,
+thereby increasing processing time and resource consumption.</p></li>
+<li><p>Choice of Tuning Parameters: The performance depends on the selection of hyperparameters. The Huber regressor has a tuning parameter called epsilon (ε) that determines the threshold for the switch between a linear loss (MSE) and an absolute loss (MAE). Choosing an appropriate value for epsilon can be challenging and requires careful consideration as a smaller epsilon value emphasizes the use of the MSE loss, making the Huber regressor behave more like OLS regression, whereas a larger epsilon value emphasizes the use of the MAE loss, making it more robust to outliers.</p></li>
+<li><p>Sensitivity to Outliers: Although the Huber regressor is designed to be more robust, it can still be sensitive to extreme outliers. If the dataset contains severe outliers,then the model performance can be impacted.</p></li>
+<li><p>Computational Complexity: The Huber regression algorithm is computationally more expensive compared to OLS regression due to the presence of the epsilon parameter and the use of a different loss function.</p></li>
+<li><p>Subjectivity in Loss Function Choice: The Huber regressor uses a hybrid loss function that transitions between MSE and MAE. The choice of the loss function can be somewhat subjective and depends on the specific requirements of the problem at hand. Different loss functions can yield different results, so it’s important to consider the trade-offs and understand the implications of the chosen loss function.</p></li>
+</ol>
+</section>
+<section id="aside-the-reason-to-limit-outliers-effect">
+<h3>Aside: The Reason to Limit Outliers’ Effect<a class="headerlink" href="#aside-the-reason-to-limit-outliers-effect" title="Link to this heading">#</a></h3>
+<p>At this point you may ask, what is the point of limiting the effect of outliers on our model? Going back to the introduction of this article, the goal of linear regression is predictive power. It accomplishes this predictive power by fitting a line to the data. If a singular point is far away from this line, while that point may be perfectly valid, it does not help with predicting the most likely case.</p>
+<p>Consider the graph above. Imagine if instead of the outlier located at X=2 having a Y value of 40, it had a value of 80, or even 1000. This value would “pull” our OLS regression line into the No Man’s Land of the chart. Our predicted Y value for a point at X=2 could be something like 20. This would result in a linear regression model that predicts nothing. The outlier has had an oversized effect on our model, and thus our model has failed to capture the trend of the data.</p>
+<p>This is why robust regression, and specifically Huber regression, is useful. It allows us to include valid outliers in our dataset, but it doesn’t allow them to have too much influence over our line of best fit. Of course, the decision to use or not use robust regression is one that depends on your dataset, and perhaps you would want the outlier to affect your model. Robust regression simply gives the statistician the option.</p>
+</section>
+</section>
+<section id="simulations">
+<h2>Simulations<a class="headerlink" href="#simulations" title="Link to this heading">#</a></h2>
+<p>The first simulation here demonstrates how Huber Regression and the OLS model diverge as we add outliers. When the outliers are evenly dispersed above and below the dataset (like in number 3) the differences are minimal. But even by adding just one outlier (like in number 1) we see that the Huber regression line follows the trend of the data better than the OLS model.</p>
+<iframe src="https://linear-regression-final-project-h4p4.onrender.com" width="100%" height="800" style="border:none;"></iframe><p>This next simulation demonstrates the difference between Huber regression and OLS in a 3-dimensional space. Other than being a fun graphic to play around with, this serves as a reminder that linear regression is not limited to 2D (just one predictive variable). While we can’t show what a 4D linear regression model looks like, we can still use both the OLS and Huber regression to model trends with any number of predictive variables. And in these higher dimensional cases, Huber regression still holds as the method less susceptible to outliers.</p>
+<iframe src="_static/ols_vs_huber_js.html" width="100%" height="800" style="border:none;"></iframe></section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Break even point in sports betting: <a class="reference external" href="https://medium.com/&#64;BetLocksmith/the-single-most-important-number-in-sports-betting-092f97777e5e">https://medium.com/&#64;BetLocksmith/the-single-most-important-number-in-sports-betting-092f97777e5e</a></p></li>
+<li><p>Peter J. Huber (1964). Robust Estimation of a Location Parameter</p></li>
+<li><p>Robust regression: <a class="reference external" href="https://en.wikipedia.org/wiki/Robust_regression">https://en.wikipedia.org/wiki/Robust_regression</a></p></li>
+<li><p>Comprehensive guide to Huber Regression : <a class="reference external" href="https://nachi-keta.medium.com/a-comprehensive-guide-to-huber-regression-balancing-efficiency-and-robustness-for-reliable-d65f122f317f">https://nachi-keta.medium.com/a-comprehensive-guide-to-huber-regression-balancing-efficiency-and-robustness-for-reliable-d65f122f317f</a></p></li>
+<li><p>Tiny ML- <a class="reference external" href="https://medium.com/&#64;thommaskevin/tinyml-huber-regression-315f30129ab3">https://medium.com/&#64;thommaskevin/tinyml-huber-regression-315f30129ab3</a></p></li>
+</ol>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Welcome to your Jupyter Book</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-basics-linear-regression">The Basics - Linear Regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#digging-deeper">Digging Deeper</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-huber-regression">What is Huber Regression?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-of-ols-vs-huber-regression">Comparison of OLS Vs Huber Regression</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#let-s-understand-the-difference-between-least-squares-method-and-absolute-deviation-method">Let’s understand the difference between Least Squares Method and Absolute Deviation Method</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#huber-regressor-algorithm">Huber Regressor Algorithm</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#about-the-huber-loss-function">About the Huber Loss Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loss-function-behaviour">Loss Function Behaviour</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-with-ols-and-mae">Comparison with OLS and MAE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#goal">Goal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-choose-the-parameter">How to choose the parameter δ ?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#advantages-of-huber-regression">Advantages of Huber Regression</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenges-of-huber-regression">Challenges of Huber Regression</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aside-the-reason-to-limit-outliers-effect">Aside: The Reason to Limit Outliers’ Effect</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulations">Simulations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
